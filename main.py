@@ -12,8 +12,8 @@ from deep_sort_realtime.deepsort_tracker import DeepSort
 from models.common import DetectMultiBackend, AutoShape
 import threading 
 
-token = '6385683960:AAEBx33B1sP5S8owuQOak8_b1Gx6NB574OI'
-receiver_id =1388289037
+token = '##########'
+receiver_id =#######
 bot = telepot.Bot(token)
 
 
