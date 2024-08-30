@@ -13,4 +13,9 @@ Dataset - https://universe.roboflow.com/catargiuconstantin/firesmokedataset/data
 pip install -r requirements.txt
 ## Second 
 +change path 
+
 +The file with the sound u need to double /
+## Third 
++dowload telegram 
+
++input token and id telegram 
