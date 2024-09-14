@@ -10,10 +10,10 @@ import pygame
 import torch
 from deep_sort_realtime.deepsort_tracker import DeepSort
 from models.common import DetectMultiBackend, AutoShape
-import threading 
+import threading
 
-token = '##########'
-receiver_id =#######
+token = '6385683960:AAEBx33B1sP5S8owuQOak8_b1Gx6NB574OI'
+receiver_id =1388289037
 bot = telepot.Bot(token)
 
 
@@ -61,11 +61,11 @@ def apply_heatmap_overlay(frame, heatmap):
 
 def fire_smoke(video_source, tracking_classes, conf_threshold=0.5, use_webcam=False, use_heatmap=False):
     tracker = DeepSort(max_age=50, nms_max_overlap=0.45)  
-    device ="cpu"
-    model = DetectMultiBackend(weights="C:/streamlit/yolov9/runs/train/exp5/weights/best.pt", device=device, fuse=True)
+    device = torch.device('cuda')
+    model = DetectMultiBackend(weights="C:/duitocdai/project/runs/train/exp5/weights/best.pt", device=device, fuse=True)
     model = AutoShape(model)
     max_bbox_area = 50000
-    with open("C:/streamlit/yolov9/data.ext/classes.names") as f:
+    with open("C:/duitocdai/project/data.ext/classes.names") as f:
         class_names = f.read().strip().split('\n')
     colors = { 
         '0': (72, 146, 234),   
@@ -186,7 +186,7 @@ def main():
     st.sidebar.markdown('---')
     video_file_buffer = st.sidebar.file_uploader("Upload a video", type=["mp4", "mov", "avi", "asf", "m4v"])
 
-    DEMO_VIDEO = 'C:/streamlit/yolov9/video.mp4'
+    DEMO_VIDEO = 'C:/duitocdai/project/video.mp4'
 
     if not video_file_buffer and not use_webcam:
         vid = cv2.VideoCapture(DEMO_VIDEO)
@@ -215,11 +215,11 @@ def main():
     kpi1, kpi2 = st.columns(2)
 
     with kpi1:
-        st.markdown("*Tốc độ khung hình*")
+        st.markdown("**Tốc độ khung hình**")
         kpi1_text = st.markdown("0")
 
     with kpi2:
-        st.markdown("*Có bao nhiêu đám cháy*")
+        st.markdown("**Có bao nhiêu đám cháy**")
         kpi2_text = st.markdown("0")
 
     st.markdown("<hr/>", unsafe_allow_html=True)
@@ -237,7 +237,7 @@ def main():
             kpi2_text.write(f"<h1 style='color: red;'>{fire_count}</h1>", unsafe_allow_html=True)
             kpi1_text.write(f"<h1 style='color: red;'>{int(fps)}</h1>", unsafe_allow_html=True)
             if not is_fire_alert_played:
-                play_sound('C://streamlit//yolov9//data.ext//fire.wav')
+                play_sound('C://duitocdai//project//data.ext//fire.wav')
                 is_fire_alert_played = True
                 last_fire_time = time.time()
 
@@ -259,13 +259,13 @@ def main():
             if is_fire_alert_played:
                 time_since_last_fire = time.time() - last_fire_time
                 if time_since_last_fire >= 60:
-                    play_sound('C://streamlit//yolov9//data.ext//endfire.wav')
+                    play_sound('C://duitocdai//project//data.ext//fire.wav')
                     is_fire_alert_played = False
                     last_fire_end_time = time.time()
 
                     send_telegram_message_async("🚒 Lửa đã được dập tắt.")
     
-if __name__ == '_main_':
+if __name__ == '__main__':
     try:
         main()
     except SystemExit:
