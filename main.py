@@ -65,7 +65,7 @@ def fire_smoke(video_source, tracking_classes, conf_threshold=0.5, use_webcam=Fa
     model = DetectMultiBackend(weights="runs/train/exp5/weights/best.pt", device=device, fuse=True)
     model = AutoShape(model)
     max_bbox_area = 50000
-    with open("C:/duitocdai/project/data.ext/classes.names") as f:
+    with open("project/data.ext/classes.names") as f:
         class_names = f.read().strip().split('\n')
     colors = { 
         '0': (72, 146, 234),   
@@ -260,7 +260,7 @@ def main():
             if is_fire_alert_played:
                 time_since_last_fire = time.time() - last_fire_time
                 if time_since_last_fire >= 60:
-                    play_sound('fire.wav')
+                    play_sound('endfire.wav')
                     is_fire_alert_played = False
                     last_fire_end_time = time.time()
 
