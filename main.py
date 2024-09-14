@@ -153,7 +153,7 @@ def send_telegram_message_async(text, image=None):
 
     threading.Thread(target=send_message).start()
 def play_sound(file_path):
-    pygame.mixer.init()
+    pygame.mixer.init(frequency=22050)  # Thay đổi tần số âm thanh nếu cần
     sound = pygame.mixer.Sound(file_path)
     sound.play()
 
