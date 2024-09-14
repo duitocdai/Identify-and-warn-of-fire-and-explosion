@@ -51,5 +51,4 @@ pygame
 torch
 deep-sort-realtime
 opencv-contrib-python-headless
-playsound 
-pydub
+
