@@ -47,7 +47,7 @@ albumentations>=1.0.3
 pycocotools>=2.0
 streamlit
 telepot
-pygame
+pydub
 torch
 deep-sort-realtime
 opencv-contrib-python-headless
