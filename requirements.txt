@@ -50,5 +50,4 @@ telepot
 pygame
 torch
 deep-sort-realtime
-opencv-contrib-python-headless
 opencv-python-headless
