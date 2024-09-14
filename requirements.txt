@@ -51,4 +51,4 @@ pydub
 torch
 deep-sort-realtime
 opencv-contrib-python-headless
-
+pygame
