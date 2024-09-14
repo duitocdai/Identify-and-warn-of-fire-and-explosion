@@ -5,6 +5,9 @@ import numpy as np
 import streamlit as st
 import io
 from pathlib import Path
+from pydub import AudioSegment
+from pydub.playback import play
+
 import telepot
 import pygame
 import torch
@@ -153,9 +156,8 @@ def send_telegram_message_async(text, image=None):
 
     threading.Thread(target=send_message).start()
 def play_sound(file_path):
-    pygame.mixer.init(frequency=22050)  # Thay đổi tần số âm thanh nếu cần
-    sound = pygame.mixer.Sound(file_path)
-    sound.play()
+    sound = AudioSegment.from_file(file_path)
+    play(sound)
 
 def main():
     st.title('Nhận dạng khói, lửa và cảnh báo cháy nổ')
@@ -235,7 +237,7 @@ def main():
             kpi2_text.write(f"<h1 style='color: red;'>{fire_count}</h1>", unsafe_allow_html=True)
             kpi1_text.write(f"<h1 style='color: red;'>{int(fps)}</h1>", unsafe_allow_html=True)
             if not is_fire_alert_played:
-                play_sound('data.ext//fire.wav')
+                play_sound('data.ext\fire.wav')
                 is_fire_alert_played = True
                 last_fire_time = time.time()
 
@@ -257,7 +259,7 @@ def main():
             if is_fire_alert_played:
                 time_since_last_fire = time.time() - last_fire_time
                 if time_since_last_fire >= 60:
-                    play_sound('data.ext//endfire.wav')
+                    play_sound('data.ext\endfire.wav')
                     is_fire_alert_played = False
                     last_fire_end_time = time.time()
 
