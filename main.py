@@ -8,8 +8,6 @@ from pathlib import Path
 import telepot
 import pygame
 import torch
-from pydub import AudioSegment
-from pydub.playback import play
 from deep_sort_realtime.deepsort_tracker import DeepSort
 from models.common import DetectMultiBackend, AutoShape
 import threading
@@ -155,8 +153,9 @@ def send_telegram_message_async(text, image=None):
 
     threading.Thread(target=send_message).start()
 def play_sound(file_path):
-    sound = AudioSegment.from_file(file_path)
-    play(sound)
+    pygame.mixer.init()
+    sound = pygame.mixer.Sound(file_path)
+    sound.play()
 
 def main():
     st.title('Nhận dạng khói, lửa và cảnh báo cháy nổ')
@@ -236,7 +235,7 @@ def main():
             kpi2_text.write(f"<h1 style='color: red;'>{fire_count}</h1>", unsafe_allow_html=True)
             kpi1_text.write(f"<h1 style='color: red;'>{int(fps)}</h1>", unsafe_allow_html=True)
             if not is_fire_alert_played:
-                play_sound('data.ext/fire.wav')
+                play_sound('data.ext//fire.wav')
                 is_fire_alert_played = True
                 last_fire_time = time.time()
 
@@ -258,7 +257,7 @@ def main():
             if is_fire_alert_played:
                 time_since_last_fire = time.time() - last_fire_time
                 if time_since_last_fire >= 60:
-                    play_sound('data.ext/fire.wav')
+                    play_sound('data.ext//endfire.wav')
                     is_fire_alert_played = False
                     last_fire_end_time = time.time()
 
