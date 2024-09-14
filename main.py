@@ -186,13 +186,15 @@ def main():
     st.sidebar.markdown('---')
     video_file_buffer = st.sidebar.file_uploader("Upload a video", type=["mp4", "mov", "avi", "asf", "m4v"])
 
-    DEMO_VIDEO = 'C:/duitocdai/project/video.mp4'
+    DEMO_VIDEO = 'video.mp4'
 
-    if not video_file_buffer and not use_webcam:
-        vid = cv2.VideoCapture(DEMO_VIDEO)
-        tfflie_name = DEMO_VIDEO
-        with open(tfflie_name, 'rb') as dem_vid:
-            demo_bytes = dem_vid.read()
+video_file_buffer = st.file_uploader("Upload a video", type=["mp4", "avi"])
+if not video_file_buffer is not None:
+    tfflie_name = video_file_buffer.name
+    with open(tfflie_name, 'wb') as out_file:
+        out_file.write(video_file_buffer.read())
+    st.video(tfflie_name)
+
     
         st.sidebar.text('Input Video')
         st.sidebar.video(demo_bytes)
