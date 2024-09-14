@@ -65,7 +65,7 @@ def fire_smoke(video_source, tracking_classes, conf_threshold=0.5, use_webcam=Fa
     model = DetectMultiBackend(weights="runs/train/exp5/weights/best.pt", device=device, fuse=True)
     model = AutoShape(model)
     max_bbox_area = 50000
-    with open("project/data.ext/classes.names") as f:
+    with open("data.ext/classes.names") as f:
         class_names = f.read().strip().split('\n')
     colors = { 
         '0': (72, 146, 234),   
