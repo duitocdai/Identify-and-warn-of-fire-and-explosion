@@ -61,7 +61,7 @@ def apply_heatmap_overlay(frame, heatmap):
 
 def fire_smoke(video_source, tracking_classes, conf_threshold=0.5, use_webcam=False, use_heatmap=False):
     tracker = DeepSort(max_age=50, nms_max_overlap=0.45)  
-    device = "cpu"
+    device = torch.device("cuda")
     model = DetectMultiBackend(weights="runs/train/exp5/weights/best.pt", device=device, fuse=True)
     model = AutoShape(model)
     max_bbox_area = 50000
@@ -238,7 +238,7 @@ def main():
             kpi2_text.write(f"<h1 style='color: red;'>{fire_count}</h1>", unsafe_allow_html=True)
             kpi1_text.write(f"<h1 style='color: red;'>{int(fps)}</h1>", unsafe_allow_html=True)
             if not is_fire_alert_played:
-                play_sound('fire.wav')
+                play_sound('data.ext/fire.wav')
                 is_fire_alert_played = True
                 last_fire_time = time.time()
 
@@ -260,7 +260,7 @@ def main():
             if is_fire_alert_played:
                 time_since_last_fire = time.time() - last_fire_time
                 if time_since_last_fire >= 60:
-                    play_sound('endfire.wav')
+                    play_sound('data.ext/endfire.wav')
                     is_fire_alert_played = False
                     last_fire_end_time = time.time()
 
