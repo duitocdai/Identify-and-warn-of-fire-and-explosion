@@ -188,22 +188,21 @@ def main():
 
     DEMO_VIDEO = 'video.mp4'
 
-video_file_buffer = st.file_uploader("Upload a video", type=["mp4", "avi"])
-if not video_file_buffer is not None:
-    tfflie_name = video_file_buffer.name
-    with open(tfflie_name, 'wb') as out_file:
-        out_file.write(video_file_buffer.read())
-    st.video(tfflie_name)
-
-    
-        st.sidebar.text('Input Video')
-        st.sidebar.video(demo_bytes)
+    if not video_file_buffer and not use_webcam:
+        if Path(DEMO_VIDEO).exists():
+            tfflie_name = DEMO_VIDEO
+            with open(tfflie_name, 'rb') as dem_vid:
+                demo_bytes = dem_vid.read()
+            st.sidebar.text('Input Video')
+            st.sidebar.video(demo_bytes)
+        else:
+            st.sidebar.error("Demo video not found.")
+            return
     elif not use_webcam:
         tfflie = tempfile.NamedTemporaryFile(suffix='.mp4', delete=False)
         tfflie.write(video_file_buffer.read())
         tfflie.seek(0)
         demo_bytes = tfflie.read()
-    
         st.sidebar.text('Input Video')
         st.sidebar.video(demo_bytes)
         tfflie.close()
@@ -239,7 +238,7 @@ if not video_file_buffer is not None:
             kpi2_text.write(f"<h1 style='color: red;'>{fire_count}</h1>", unsafe_allow_html=True)
             kpi1_text.write(f"<h1 style='color: red;'>{int(fps)}</h1>", unsafe_allow_html=True)
             if not is_fire_alert_played:
-                play_sound('C://duitocdai//project//data.ext//fire.wav')
+                play_sound('fire.wav')
                 is_fire_alert_played = True
                 last_fire_time = time.time()
 
@@ -261,7 +260,7 @@ if not video_file_buffer is not None:
             if is_fire_alert_played:
                 time_since_last_fire = time.time() - last_fire_time
                 if time_since_last_fire >= 60:
-                    play_sound('C://duitocdai//project//data.ext//fire.wav')
+                    play_sound('fire.wav')
                     is_fire_alert_played = False
                     last_fire_end_time = time.time()
 
