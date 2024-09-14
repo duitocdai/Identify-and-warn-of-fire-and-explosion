@@ -8,6 +8,8 @@ from pathlib import Path
 import telepot
 import pygame
 import torch
+from pydub import AudioSegment
+from pydub.playback import play
 from deep_sort_realtime.deepsort_tracker import DeepSort
 from models.common import DetectMultiBackend, AutoShape
 import threading
@@ -153,9 +155,8 @@ def send_telegram_message_async(text, image=None):
 
     threading.Thread(target=send_message).start()
 def play_sound(file_path):
-    pygame.mixer.init()
-    sound = pygame.mixer.Sound(file_path)
-    sound.play()
+    sound = AudioSegment.from_file(file_path)
+    play(sound)
 
 def main():
     st.title('Nhận dạng khói, lửa và cảnh báo cháy nổ')
