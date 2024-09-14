@@ -61,8 +61,8 @@ def apply_heatmap_overlay(frame, heatmap):
 
 def fire_smoke(video_source, tracking_classes, conf_threshold=0.5, use_webcam=False, use_heatmap=False):
     tracker = DeepSort(max_age=50, nms_max_overlap=0.45)  
-    device = torch.device("cuda")
-    model = DetectMultiBackend(weights="runs/train/exp5/weights/best.pt", device=device, fuse=True)
+    device = torch.device('cuda')
+    model = DetectMultiBackend(weights="C:/duitocdai/project/runs/train/exp5/weights/best.pt", device=device, fuse=True)
     model = AutoShape(model)
     max_bbox_area = 50000
     with open("data.ext/classes.names") as f:
@@ -81,7 +81,6 @@ def fire_smoke(video_source, tracking_classes, conf_threshold=0.5, use_webcam=Fa
     start_time = time.time()
     frame_count = 0
 
-    # Initialize heatmap
     heatmap, bbox_ages = initialize_heatmap((frame_height, frame_width))
 
     while True:
@@ -92,7 +91,6 @@ def fire_smoke(video_source, tracking_classes, conf_threshold=0.5, use_webcam=Fa
         current_time = time.time()
         fps = frame_count / (current_time - start_time)
 
-        # Chuyển đổi frame từ BGR sang RGB
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = model(frame_rgb)
         detections = []
@@ -107,7 +105,7 @@ def fire_smoke(video_source, tracking_classes, conf_threshold=0.5, use_webcam=Fa
 
             if class_id in tracking_classes and confidence >= conf_threshold:
                 detections.append([[x1, y1, x2 - x1, y2 - y1], confidence, class_id])
-                if class_id == 0:  # Assuming class_id 1 is for fire
+                if class_id == 0:
                     fire_count += 1
                     bboxes.append((x1, y1, x2, y2))
                 
@@ -123,16 +121,16 @@ def fire_smoke(video_source, tracking_classes, conf_threshold=0.5, use_webcam=Fa
                 x1, y1, x2, y2 = map(int, ltrb)
                 if track_id in previous_bboxes and is_bbox_too_large((x1, y1, x2, y2), previous_bboxes[track_id]):
                     continue
-                color = colors.get(str(class_id), (255, 0, 0))  # Default màu đỏ nếu không tìm thấy class_id
+                color = colors.get(str(class_id), (255, 0, 0))  
                 B, G, R = color
 
-                # Hiển thị tên lớp và độ tin cậy
+
                 label = "{}-{:.2f}".format(class_names[class_id], confidence)
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (B, G, R), 2)
                 cv2.rectangle(frame, (x1 - 1, y1 - 20), (x1 + len(label) * 12, y1), (B, G, R), -1)
                 cv2.putText(frame, label, (x1 + 5, y1 - 8), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 
-                previous_bboxes[track_id] = (x1, y1, x2, y2)  # Cập nhật bbox trước đó
+                previous_bboxes[track_id] = (x1, y1, x2, y2)  
 
         if use_heatmap:
             heatmap, bbox_ages = update_heatmap(heatmap, bboxes, bbox_ages)
@@ -189,20 +187,19 @@ def main():
     DEMO_VIDEO = 'video.mp4'
 
     if not video_file_buffer and not use_webcam:
-        if Path(DEMO_VIDEO).exists():
-            tfflie_name = DEMO_VIDEO
-            with open(tfflie_name, 'rb') as dem_vid:
-                demo_bytes = dem_vid.read()
-            st.sidebar.text('Input Video')
-            st.sidebar.video(demo_bytes)
-        else:
-            st.sidebar.error("Demo video not found.")
-            return
+        vid = cv2.VideoCapture(DEMO_VIDEO)
+        tfflie_name = DEMO_VIDEO
+        with open(tfflie_name, 'rb') as dem_vid:
+            demo_bytes = dem_vid.read()
+    
+        st.sidebar.text('Input Video')
+        st.sidebar.video(demo_bytes)
     elif not use_webcam:
         tfflie = tempfile.NamedTemporaryFile(suffix='.mp4', delete=False)
         tfflie.write(video_file_buffer.read())
         tfflie.seek(0)
         demo_bytes = tfflie.read()
+    
         st.sidebar.text('Input Video')
         st.sidebar.video(demo_bytes)
         tfflie.close()
@@ -238,7 +235,7 @@ def main():
             kpi2_text.write(f"<h1 style='color: red;'>{fire_count}</h1>", unsafe_allow_html=True)
             kpi1_text.write(f"<h1 style='color: red;'>{int(fps)}</h1>", unsafe_allow_html=True)
             if not is_fire_alert_played:
-                play_sound('data.ext/fire.wav')
+                play_sound('/data.ext/fire.wav')
                 is_fire_alert_played = True
                 last_fire_time = time.time()
 
@@ -260,7 +257,7 @@ def main():
             if is_fire_alert_played:
                 time_since_last_fire = time.time() - last_fire_time
                 if time_since_last_fire >= 60:
-                    play_sound('data.ext/endfire.wav')
+                    play_sound('/data.ext/fire.wav')
                     is_fire_alert_played = False
                     last_fire_end_time = time.time()
 
