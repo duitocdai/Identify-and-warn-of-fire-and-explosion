@@ -62,7 +62,7 @@ def apply_heatmap_overlay(frame, heatmap):
 def fire_smoke(video_source, tracking_classes, conf_threshold=0.5, use_webcam=False, use_heatmap=False):
     tracker = DeepSort(max_age=50, nms_max_overlap=0.45)  
     device = torch.device('cuda')
-    model = DetectMultiBackend(weights="C:/duitocdai/project/runs/train/exp5/weights/best.pt", device=device, fuse=True)
+    model = DetectMultiBackend(weights="runs/train/exp5/weights/best.pt", device=device, fuse=True)
     model = AutoShape(model)
     max_bbox_area = 50000
     with open("data.ext/classes.names") as f:
